@@ -27,7 +27,7 @@ public class Main extends Application {
 
     /**
      * Launches the AutoModel program and displays the main screen.
-     * <i>terminal.fxml</i> is the resource to build the scene.
+     * terminal.fxml is the resource to build the scene.
      * The default WIDTH is 600 pixels and the default HEIGHT is 400 pixels.
      * The title of the window is "AutoModel" after the program.
      * The exit route is controlled by exit().

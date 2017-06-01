@@ -162,4 +162,5 @@ $response = $ua->request($req);
 
 open (LOG, ">log.bls") or die $!;
 print LOG $response->content;
+print LOG @ARGV;
 exit 0;

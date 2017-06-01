@@ -12,17 +12,12 @@ import java.util.List;
  */
 public class Search {
 
-    private List<File> files;
-    private String searchPerl;
-    private Process process;
+    private List<File> files = null;
+    private String searchPerl = new File("web_blast.pl").getAbsolutePath();;
+    private Process process = null;
     private boolean keepRunning;
 
-    public void Search() {
-        files = null;
-        searchPerl = new File("web_blast.pl").getAbsolutePath();
-        process = null;
-        keepRunning = true;
-    }
+
 
     public void getFiles() {
         FileChooser fc = new FileChooser();
@@ -32,17 +27,21 @@ public class Search {
 
     public int runSearch() throws IOException, InterruptedException {
         int exitCode = -1;
+        keepRunning = true;
         while (keepRunning && files != null){
-            for (File query : files) {
-                process = Runtime.getRuntime().exec("perl " + searchPerl + " " + query);
+            for (int i = 0; i < files.size(); i++) {
+                process = Runtime.getRuntime().exec("perl web_blast.pl blastp nr " + files.get(i));
                 process.waitFor();
                 exitCode = process.exitValue();
+                if (i == files.size()-1) {
+                    keepRunning = false;
+                }
             }
         }
         return exitCode;
     }
 
-    public boolean stopSearch() {
+   public boolean stopSearch() {
         if (process.isAlive()) {
             int exit = JOptionPane.showConfirmDialog(null, "Cancel all subsequent " +
             "searches?", "End process", JOptionPane.YES_NO_OPTION);

@@ -122,7 +122,7 @@ while (true)
 
     if ($response->content =~ /\s+Status=WAITING/m)
         {
-        # print STDERR "Searching...\n";
+            print STDERR "Searching...\n";
         next;
         }
 
@@ -142,7 +142,7 @@ while (true)
         {
         if ($response->content =~ /\s+ThereAreHits=yes/m)
             {
-            #  print STDERR "Search complete, retrieving results...\n";
+            print STDERR "Search complete, retrieving results...\n";
             last;
             }
         else

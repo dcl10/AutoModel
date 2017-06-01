@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Controller {
 
-    private Search search =  new Search();
+    private Search search = new Search();
     private int program;
     @FXML
     private TextArea terminal;
@@ -23,12 +23,29 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        message += program;
+        switch (program) {
+            case -1 : message += "Failed to execute BLAST search.\n";
+            break;
+            case 0 : message += "Search completed.\n";
+            break;
+            case 1 : message += "web_blast.pl improperly executed.\n";
+            break;
+            case 2 : message += "No results found.\n";
+            break;
+            case 3 : message += "rid expired.\n";
+            break;
+            case 4 : message += "Search failed.\n";
+            break;
+            case 5 : message += "An unknown error occurred.\n";
+            break;
+            default : message += "A totally unforeseen error occurred.\n";
+            break;
+        }
         terminal.setText(message);
 
     }
 
     public void cancel() {
-        // TODO: add code to terminate the the searches
+       search.stopSearch();
     }
 }

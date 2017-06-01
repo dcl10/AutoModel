@@ -25,7 +25,7 @@ public class Search {
     private boolean keepRunning;
 
     /**
-     * This method calles the system's file chooser and adds the user's choice of files to the List variable called
+     * This method calls the system's file chooser and adds the user's choice of files to the List variable called
      * files. The title of the file chooser is set to "Open".
      */
     public void getFiles() {

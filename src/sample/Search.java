@@ -33,7 +33,9 @@ public class Search {
                 process = Runtime.getRuntime().exec("perl web_blast.pl blastp nr " + files.get(i));
                 process.waitFor();
                 exitCode = process.exitValue();
-                if (i == files.size()-1) {keepRunning = false;}
+                if (i == files.size()-1) {
+                    keepRunning = false;
+                }
             }
         }
         return exitCode;

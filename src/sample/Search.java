@@ -31,8 +31,8 @@ public class Search {
     }
 
     public int runSearch() throws IOException, InterruptedException {
-        int exitCode = 0;
-        while (keepRunning){
+        int exitCode = -1;
+        while (keepRunning && files != null){
             for (File query : files) {
                 process = Runtime.getRuntime().exec("perl " + searchPerl + " " + query);
                 process.waitFor();

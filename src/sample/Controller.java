@@ -1,11 +1,14 @@
 package sample;
 
-
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
 import java.io.IOException;
 
+/**
+This is the controller class for AutoModel. The methods determine the functionality of each button
+in the GUI.
+ */
 public class Controller {
 
     private Search search = new Search();
@@ -14,6 +17,11 @@ public class Controller {
     private TextArea terminal;
     private String message = "";
 
+    /**
+     * On clicking the "Begin" button on the GUI, the system file chooser will appear.
+     * Once the user has selected his/her files to be modelled the workflow will be initiated.
+     * As the program continues, updates will be posted to the "terminal" TextArea.
+     */
     public void begin() {
         search.getFiles();
         try {
@@ -23,6 +31,10 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        /*
+        This is wrong. The exit codes from the actual Perl script
+        were not returned. Instead they are from the Process object in Search
+        */
         /*switch (program) {
             case -1 : message += "Failed to execute BLAST search.\n";
             break;
@@ -46,6 +58,11 @@ public class Controller {
 
     }
 
+    /**
+     * Upon clicking the "Cancel" button in the GUI, this method will call other methods to
+     * kill the current process in action and will prevent subsequent processes from being
+     * initiated.
+     */
     public void cancel() {
        search.stopSearch();
     }

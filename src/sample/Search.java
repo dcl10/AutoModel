@@ -13,10 +13,9 @@ import java.util.List;
 public class Search {
 
     private List<File> files = null;
-    private String searchPerl = new File("web_blast.pl").getAbsolutePath();;
+    private String searchPerl = new File("web_blast.pl").getAbsolutePath();
     private Process process = null;
     private boolean keepRunning;
-
 
 
     public void getFiles() {
@@ -30,7 +29,9 @@ public class Search {
         keepRunning = true;
         while (keepRunning && files != null){
             for (int i = 0; i < files.size(); i++) {
-                process = Runtime.getRuntime().exec("perl web_blast.pl blastp nr " + files.get(i));
+                String query = files.get(i).getAbsolutePath();
+                process = Runtime.getRuntime().exec("perl " + searchPerl + " " + "blastp " + "nr " +
+                        query);
                 process.waitFor();
                 exitCode = process.exitValue();
                 if (i == files.size()-1) {
@@ -41,7 +42,7 @@ public class Search {
         return exitCode;
     }
 
-   public boolean stopSearch() {
+   public void stopSearch() {
         if (process.isAlive()) {
             int exit = JOptionPane.showConfirmDialog(null, "Cancel all subsequent " +
             "searches?", "End process", JOptionPane.YES_NO_OPTION);
@@ -49,6 +50,5 @@ public class Search {
                 keepRunning = false;
             }
         }
-        return keepRunning;
     }
 }

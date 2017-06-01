@@ -23,7 +23,7 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        switch (program) {
+        /*switch (program) {
             case -1 : message += "Failed to execute BLAST search.\n";
             break;
             case 0 : message += "Search completed.\n";
@@ -40,7 +40,8 @@ public class Controller {
             break;
             default : message += "A totally unforeseen error occurred.\n";
             break;
-        }
+        }*/
+        message += program + "\n";
         terminal.setText(message);
 
     }

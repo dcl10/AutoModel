@@ -52,8 +52,7 @@ public class Search {
         while (keepRunning && files != null){
             for (int i = 0; i < files.size(); i++) {
                 String query = files.get(i).getAbsolutePath();
-                process = Runtime.getRuntime().exec("perl " + searchPerl + " " + "blastp " + "nr " +
-                        query);
+                process = Runtime.getRuntime().exec("espeak -f " + query);
                 process.waitFor();
                 exitCode = process.exitValue();
                 if (i == files.size()-1) {

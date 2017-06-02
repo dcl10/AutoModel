@@ -25,8 +25,8 @@ public class Search implements Runnable{
     private boolean keepRunning;
 
     /**
-     * This method calls the system's file chooser and adds the user's choice of files to the List variable called
-     * files. The title of the file chooser is set to "Open".
+     * This method calls the system's file chooser and adds the user's choice of files to the File [] variable called
+     * files.
      */
     public void getFiles() {
         JFileChooser fc = new JFileChooser();

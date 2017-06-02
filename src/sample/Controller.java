@@ -16,6 +16,7 @@ public class Controller {
     @FXML
     private TextArea terminal;
     private String message = "";
+    private Thread thread;
 
     /**
      * On clicking the "Begin" button on the GUI, the system file chooser will appear.
@@ -23,14 +24,8 @@ public class Controller {
      * As the program continues, updates will be posted to the "terminal" TextArea.
      */
     public void begin() {
-        search.getFiles();
-        try {
-            program = search.runSearch();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        thread = new Thread(search);
+        thread.start();
         /*
         This is wrong. The exit codes from the actual Perl script
         were not returned. Instead they are from the Process object in Search
@@ -53,17 +48,16 @@ public class Controller {
             default : message += "A totally unforeseen error occurred.\n";
             break;
         }*/
-        message += program + "\n";
-        terminal.setText(message);
+        //message += program + "\n";
+        //terminal.setText(message);
 
     }
 
     /**
-     * Upon clicking the "Cancel" button in the GUI, this method will call other methods to
-     * kill the current process in action and will prevent subsequent processes from being
-     * initiated.
+     * Upon clicking the "Cancel" button in the GUI, this method will terminate the thread
+     * generated in begin()
      */
     public void cancel() {
-       search.stopSearch();
+        // TODO: work out how to terminate the thread generated in begin
     }
 }

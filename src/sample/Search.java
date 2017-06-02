@@ -10,16 +10,16 @@ import java.util.List;
 /**
  * This class is responsible for executing web BLAST searches against the PDB and generating results files
  * to be parsed later.
- * This class enables the user to select the FASTA files to be modelled graphically via the FileChooser class in
- * getFiles(), not that trashy JFileChooser which looks so '90s.
+ * This class enables the user to select the FASTA files to be modelled graphically via the JFileChooser
+ * because the JavaFX FileChooser wouldn't close after the files were choosen.
  * The class also provides the ability to run the search via the runSearch() method. Sadly it doesn't work yet.
  * The user can terminate the searches at any point. When the "Cancel" button is clicked in the GUI the controller
  * calls the stopSearch() method in this class which sets the boolean variable keepRunning to false, breaking the
  * while loop in runSearch().
  */
-public class Search {
+public class Search implements Runnable{
 
-    private List<File> files = null;
+    private File [] files = null;
     private String searchPerl = new File("web_blast.pl").getAbsolutePath();
     private Process process = null;
     private boolean keepRunning;
@@ -29,9 +29,10 @@ public class Search {
      * files. The title of the file chooser is set to "Open".
      */
     public void getFiles() {
-        FileChooser fc = new FileChooser();
-        fc.setTitle("Open");
-        files = fc.showOpenMultipleDialog(null);
+        JFileChooser fc = new JFileChooser();
+        fc.setMultiSelectionEnabled(true);
+        fc.showOpenDialog(null);
+        files = fc.getSelectedFiles();
     }
 
     /**
@@ -50,12 +51,12 @@ public class Search {
         int exitCode = -1;
         keepRunning = true;
         while (keepRunning && files != null){
-            for (int i = 0; i < files.size(); i++) {
-                String query = files.get(i).getAbsolutePath();
+            for (int i = 0; i < files.length; i++) {
+                String query = files[i].getAbsolutePath();
                 process = Runtime.getRuntime().exec("espeak -f " + query);
                 process.waitFor();
                 exitCode = process.exitValue();
-                if (i == files.size()-1) {
+                if (i == files.length-1) {
                     keepRunning = false;
                 }
             }
@@ -73,7 +74,20 @@ public class Search {
             "searches?", "End process", JOptionPane.YES_NO_OPTION);
             if (exit == JOptionPane.YES_OPTION){
                 keepRunning = false;
+                process.destroy();
             }
+        }
+    }
+
+    @Override
+    public void run() {
+        getFiles();
+        try {
+            runSearch();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

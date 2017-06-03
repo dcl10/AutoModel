@@ -55,7 +55,7 @@ public class Main extends Application {
     }
 
     /**
-     * This method is called on exit request and will exit the program if the user clicks <b>YES</b>.
+     * This method is called on exit request and will exit the program if the user clicks YES.
      */
     public void exit() {
         int close = JOptionPane.showConfirmDialog(null, "Close AutoModel?", "Close",

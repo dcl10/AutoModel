@@ -59,7 +59,6 @@ public class Controller {
      * generated in begin()
      */
     public void cancel() {
-        // TODO: work out how to terminate the thread generated in begin
         search.stopSearch();
     }
 }

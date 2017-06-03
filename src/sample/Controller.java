@@ -3,7 +3,6 @@ package sample;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
-import java.io.IOException;
 
 /**
 This is the controller class for AutoModel. The methods determine the functionality of each button
@@ -24,8 +23,10 @@ public class Controller {
      * As the program continues, updates will be posted to the "terminal" TextArea.
      */
     public void begin() {
+        search.getFiles();
         thread = new Thread(search);
         thread.start();
+
         /*
         This is wrong. The exit codes from the actual Perl script
         were not returned. Instead they are from the Process object in Search
@@ -59,5 +60,6 @@ public class Controller {
      */
     public void cancel() {
         // TODO: work out how to terminate the thread generated in begin
+        search.stopSearch();
     }
 }

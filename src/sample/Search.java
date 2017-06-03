@@ -47,21 +47,10 @@ public class Search implements Runnable{
      * @throws IOException
      * @throws InterruptedException
      */
-    public int runSearch() throws IOException, InterruptedException {
-        int exitCode = -1;
-        keepRunning = true;
-        while (keepRunning && files != null){
-            for (int i = 0; i < files.length; i++) {
-                String query = files[i].getAbsolutePath();
-                process = Runtime.getRuntime().exec("espeak -f " + query);
-                process.waitFor();
-                exitCode = process.exitValue();
-                if (i == files.length-1) {
-                    keepRunning = false;
-                }
-            }
-        }
-        return exitCode;
+    public void runSearch(File file) throws IOException, InterruptedException {
+            String query = file.getAbsolutePath();
+            process = Runtime.getRuntime().exec("espeak -f " + query);
+            process.waitFor();
     }
 
     /**
@@ -81,13 +70,21 @@ public class Search implements Runnable{
 
     @Override
     public void run() {
-        getFiles();
-        try {
-            runSearch();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        keepRunning = true;
+        int counter = 0;
+        while (keepRunning && counter < files.length) {
+            try {
+                runSearch(files[counter]);
+                counter++;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                System.out.println("The thread was interrupted" + System.lineSeparator());
+            }
+            if (!keepRunning) {
+                break;
+            }
         }
+
     }
 }

@@ -2,6 +2,10 @@
 use strict;
 use warnings FATAL => 'all';
 
+# After a BLAST search is performed against the PD database using the web_blast.pl script,
+# this script is used to retrieve the ID of the highest scoring match and retrieve
+# the corresponding PDB file from the PDB database.
+
 # Module required to parse BLAST search results.
 use Bio::SearchIO;
 

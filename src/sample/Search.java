@@ -17,7 +17,7 @@ import java.io.IOException;
 public class Search implements Runnable{
 
     private File[] files = null;
-    private File program = new File("web_blast.pl");
+    private File program = new File("additional/web_blast.pl");
     private String searchPerl = "perl " + program + " ";
     private Process process = null;
     private boolean keepRunning;

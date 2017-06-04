@@ -48,6 +48,8 @@
 #     5 - unknown error
 #
 # ===========================================================================
+# This program was modified by Daniel Lea to be used in a workflow program
+# that makes homology models of unresolved protein structures.
 
 use URI::Escape;
 use LWP::UserAgent;
@@ -160,7 +162,18 @@ while (true)
 $req = new HTTP::Request GET => "https://blast.ncbi.nlm.nih.gov/blast/Blast.cgi?CMD=Get&FORMAT_TYPE=Text&RID=$rid";
 $response = $ua->request($req);
 
-open (LOG, ">log.bls") or die $!;
+# Added by Daniel Lea
+# Generate the log file to store the results of the BLAST search
+$outfile = &make_log($ARGV[0]);
+
+open (LOG, ">$outfile") or die $!;
 print LOG $response->content;
 print LOG @ARGV;
 exit 0;
+
+# Sub to create the filename of the log file
+sub make_log {
+    $to_change = $_[0];
+    $to_change =~ s/.fasta/_results.bls/;
+    return $to_change;
+}

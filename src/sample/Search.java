@@ -17,10 +17,12 @@ import java.io.IOException;
 public class Search implements Runnable{
 
     private File[] files = null;
-    private String searchPerl = new File("web_blast.pl").getAbsolutePath();
+    private File program = new File("web_blast.pl");
+    private String searchPerl = "perl " + program + " ";
     private Process process = null;
     private boolean keepRunning;
     private String message = "";
+
 
     /**
      * This method calls the JFileChooser and adds the user's choice of files to the File [] variable called
@@ -37,7 +39,7 @@ public class Search implements Runnable{
     public void runSearch(File file) throws IOException, InterruptedException {
         String query = file.getAbsolutePath();
         setMessage("Starting: " + file.getName() + System.lineSeparator());
-        process = Runtime.getRuntime().exec("espeak -f " + query);
+        process = Runtime.getRuntime().exec(searchPerl + "blastp pdb " + file);
         process.waitFor();
         setMessage("Completed: " + file.getName() +System.lineSeparator());
     }

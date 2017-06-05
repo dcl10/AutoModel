@@ -14,7 +14,7 @@ import java.io.IOException;
  * calls the stopSearch() method in this class which sets the boolean variable keepRunning to false, breaking the
  * while loop in runSearch().
  */
-public class Search implements Runnable{
+public class Search implements Runnable {
 
     private File[] files = null;
     private File program = new File("additional/web_blast.pl");
@@ -37,7 +37,6 @@ public class Search implements Runnable{
 
 
     public void runSearch(File file) throws IOException, InterruptedException {
-        String query = file.getAbsolutePath();
         setMessage("Starting: " + file.getName() + System.lineSeparator());
         process = Runtime.getRuntime().exec(searchPerl + "blastp pdb " + file);
         process.waitFor();
@@ -52,7 +51,7 @@ public class Search implements Runnable{
     public void stopSearch() {
         if (process.isAlive()) {
             int exit = JOptionPane.showConfirmDialog(null, "WARNING: All subsequent "
-                    + "process will be terminated as well.", "End process", JOptionPane.OK_CANCEL_OPTION);
+                    + "processes will be terminated as well.", "End process", JOptionPane.OK_CANCEL_OPTION);
             if (exit == JOptionPane.OK_OPTION){
                 keepRunning = false;
                 process.destroy();

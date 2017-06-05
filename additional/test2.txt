@@ -1,2 +1,0 @@
-This is another file.
-It is to test Daniel's program.

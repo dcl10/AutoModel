@@ -171,6 +171,7 @@ print LOG $response->content;
 print LOG @ARGV;
 exit 0;
 
+# Added by Daniel Lea
 # Sub to create the filename of the log file
 sub make_log {
     $to_change = $_[0];

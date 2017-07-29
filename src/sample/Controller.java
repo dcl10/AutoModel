@@ -9,12 +9,13 @@ import java.util.TimerTask;
 This is the controller class for AutoModel. The methods determine the functionality of each button
 in the GUI.
  */
-public class Controller {
+public class Controller implements Runnable{
 
     private Search search = new Search();
     private Thread thread;
     @FXML
     private TextArea terminal;
+    private boolean keepRunning;
 
     /**
      * On clicking the "Begin" button on the GUI, the system file chooser will appear.
@@ -50,5 +51,14 @@ public class Controller {
      */
     public void cancel() {
         search.stopSearch();
+    }
+
+    @Override
+    public void run() {
+        try {
+            begin();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

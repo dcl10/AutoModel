@@ -17,7 +17,7 @@ import java.io.IOException;
 public class Search implements Runnable {
 
     private File[] files = null;
-    private File program = new File("additional/web_blast.pl");
+    private File program = new File("Additional/web_blast.pl");
     private String searchPerl = "perl " + program + " ";
     private Process process = null;
     private boolean keepRunning;
@@ -40,7 +40,8 @@ public class Search implements Runnable {
         setMessage("Starting: " + file.getName() + System.lineSeparator());
         process = Runtime.getRuntime().exec(searchPerl + "blastp pdb " + file);
         process.waitFor();
-        setMessage("Completed: " + file.getName() +System.lineSeparator());
+        if (process.exitValue() == 0 ) setMessage("Completed: " + file.getName() + System.lineSeparator());
+        else setMessage("Failed: " + file.getName() + System.lineSeparator());
     }
 
     /**

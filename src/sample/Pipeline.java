@@ -11,14 +11,16 @@ import java.io.IOException;
  * because the JavaFX FileChooser wouldn't close after the files were chosen.
  * The class also provides the ability to run the search via the runSearch() method. Sadly it doesn't work yet.
  * The user can terminate the searches at any point. When the "Cancel" button is clicked in the GUI the controller
- * calls the stopSearch() method in this class which sets the boolean variable keepRunning to false, breaking the
+ * calls the stopPipeline() method in this class which sets the boolean variable keepRunning to false, breaking the
  * while loop in runSearch().
  */
-public class Search implements Runnable {
+public class Pipeline implements Runnable {
 
     private File[] files = null;
-    private File program = new File("Additional/web_blast.pl");
-    private String searchPerl = "perl " + program + " ";
+    private File program1 = new File("Additional/web_blast.pl");
+    private File program2 = new File("Additional/result_parse.pl");
+    private String searchPerl = "perl " + program1 + " ";
+    private String parsePerl = "perl " + program2 + " ";
     private Process process = null;
     private boolean keepRunning;
     private String message = "";
@@ -44,12 +46,22 @@ public class Search implements Runnable {
         else setMessage("Failed: " + file.getName() + System.lineSeparator());
     }
 
+    public void runParse(File file) throws IOException, InterruptedException {
+        setMessage("Parsing: " + file.getName() + System.lineSeparator());
+        String bls = file.getAbsolutePath().replace(".fasta", "_results.bls");
+        file = new File(bls);
+        process = Runtime.getRuntime().exec(parsePerl + file);
+        process.waitFor();
+        if (process.exitValue() == 0 ) setMessage("Completed: " + file.getName() + System.lineSeparator());
+        else setMessage("Failed: " + file.getName() + System.lineSeparator());
+    }
+
     /**
      * This method is called when the user clicks the "Cancel" button in the GUI. This sets the boolean variable
      * keepRunning to false, thereby breaking the while loop in the run() method. The current process is also
      * destroyed.
      */
-    public void stopSearch() {
+    public void stopPipeline() {
         if (process.isAlive()) {
             int exit = JOptionPane.showConfirmDialog(null, "WARNING: All subsequent "
                     + "processes will be terminated as well.", "End process", JOptionPane.OK_CANCEL_OPTION);
@@ -71,7 +83,7 @@ public class Search implements Runnable {
     /**
      * This method is called when the user clicks "Begin" in the GUI. The while loop will execute runSearch()
      * so long is keepRunning is true and counter is less than length of files[]. The if statement exit the loop if
-     * keepRunning is set to false by calling the stopSearch() method. The current process will also be stopped.
+     * keepRunning is set to false by calling the stopPipeline() method. The current process will also be stopped.
      */
     @Override
     public void run() {
@@ -80,6 +92,7 @@ public class Search implements Runnable {
         while (keepRunning && counter < files.length) {
             try {
                 runSearch(files[counter]);
+                runParse(files[counter]);
                 counter++;
             } catch (IOException e) {
                 e.printStackTrace();

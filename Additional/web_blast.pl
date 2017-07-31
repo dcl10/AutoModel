@@ -130,13 +130,13 @@ while (true)
 
     if ($response->content =~ /\s+Status=FAILED/m)
         {
-        print STDERR "Search $rid failed; please report to blast-help\@ncbi.nlm.nih.gov.\n";
+        print STDERR "Pipeline $rid failed; please report to blast-help\@ncbi.nlm.nih.gov.\n";
         exit 4;
         }
 
     if ($response->content =~ /\s+Status=UNKNOWN/m)
         {
-        print STDERR "Search $rid expired.\n";
+        print STDERR "Pipeline $rid expired.\n";
         exit 3;
         }
 
@@ -144,7 +144,7 @@ while (true)
         {
         if ($response->content =~ /\s+ThereAreHits=yes/m)
             {
-            print STDERR "Search complete, retrieving results...\n";
+            print STDERR "Pipeline complete, retrieving results...\n";
             last;
             }
         else

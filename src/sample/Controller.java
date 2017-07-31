@@ -11,11 +11,10 @@ in the GUI.
  */
 public class Controller implements Runnable{
 
-    private Search search = new Search();
+    private Pipeline pipeline = new Pipeline();
     private Thread thread;
     @FXML
     private TextArea terminal;
-    private boolean keepRunning;
 
     /**
      * On clicking the "Begin" button on the GUI, the system file chooser will appear.
@@ -23,8 +22,8 @@ public class Controller implements Runnable{
      * As the program continues, updates will be posted to the "terminal" TextArea.
      */
     public void begin() throws InterruptedException {
-        search.getFiles();
-        thread = new Thread(search);
+        pipeline.getFiles();
+        thread = new Thread(pipeline);
         thread.start();
         refresh();
     }
@@ -38,7 +37,7 @@ public class Controller implements Runnable{
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                terminal.setText(search.getMessage());
+                terminal.setText(pipeline.getMessage());
                 System.out.println(thread.getState().toString());
                 if (thread.getState() == Thread.State.TERMINATED) timer.cancel();
             }
@@ -50,7 +49,7 @@ public class Controller implements Runnable{
      * generated in begin()
      */
     public void cancel() {
-        search.stopSearch();
+        pipeline.stopPipeline();
     }
 
     @Override

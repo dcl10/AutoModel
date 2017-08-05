@@ -35,7 +35,7 @@ foreach (@input) {
     $seqid =~ s/_.?/.pdb/;
 
     # Retrieve the appropriate PDB file from the PDB database.
-    system "wget https://files.rcsb.org/download/$seqid";
+    system "wget https://files.rcsb.org/download/$seqid -P ./Working";
 }
 
 

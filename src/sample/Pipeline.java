@@ -17,6 +17,7 @@ import java.io.IOException;
 public class Pipeline implements Runnable {
 
     private File[] files = null;
+    private File dir = new File("./Working");
     private File program1 = new File("Additional/web_blast.pl");
     private File program2 = new File("Additional/result_parse.pl");
     private String searchPerl = "perl " + program1 + " ";
@@ -32,6 +33,7 @@ public class Pipeline implements Runnable {
      */
     public void getFiles() {
         JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(dir);
         fc.setMultiSelectionEnabled(true);
         fc.showOpenDialog(null);
         files = fc.getSelectedFiles();
@@ -47,9 +49,9 @@ public class Pipeline implements Runnable {
     }
 
     public void runParse(File file) throws IOException, InterruptedException {
-        setMessage("Parsing: " + file.getName() + System.lineSeparator());
         String bls = file.getAbsolutePath().replace(".fasta", "_results.bls");
         file = new File(bls);
+        setMessage("Parsing: " + file.getName() + System.lineSeparator());
         process = Runtime.getRuntime().exec(parsePerl + file);
         process.waitFor();
         if (process.exitValue() == 0 ) setMessage("Completed: " + file.getName() + System.lineSeparator());
@@ -98,7 +100,9 @@ public class Pipeline implements Runnable {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 System.out.println("The thread was interrupted" + System.lineSeparator());
+                setMessage("The thread was interrupted" + System.lineSeparator());
             }
         }
+        setMessage("Workflow completed.");
     }
 }

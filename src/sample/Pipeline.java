@@ -18,8 +18,8 @@ public class Pipeline implements Runnable {
 
     private File[] files = null;
     private File dir = new File("./Working");
-    private File program1 = new File("Additional/web_blast.pl");
-    private File program2 = new File("Additional/result_parse.pl");
+    private File program1 = new File("./Additional/web_blast.pl");
+    private File program2 = new File("./Additional/result_parse.pl");
     private String searchPerl = "perl " + program1 + " ";
     private String parsePerl = "perl " + program2 + " ";
     private Process process = null;
@@ -39,7 +39,13 @@ public class Pipeline implements Runnable {
         files = fc.getSelectedFiles();
     }
 
-
+    /**
+     * This method makes a call to web_blast.pl to search the PDB database for the protein whose sequence
+     * matches that in the input file given as the method parameter.
+     * @param file
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void runSearch(File file) throws IOException, InterruptedException {
         setMessage("Starting: " + file.getName() + System.lineSeparator());
         process = Runtime.getRuntime().exec(searchPerl + "blastp pdb " + file);
@@ -48,14 +54,22 @@ public class Pipeline implements Runnable {
         else setMessage("Failed: " + file.getName() + System.lineSeparator());
     }
 
-    public void runParse(File file) throws IOException, InterruptedException {
-        String bls = file.getAbsolutePath().replace(".fasta", "_results.bls");
-        file = new File(bls);
-        setMessage("Parsing: " + file.getName() + System.lineSeparator());
-        process = Runtime.getRuntime().exec(parsePerl + file);
+    /*
+    Even though I can get the String in the processs...exec(#command#) to match what I would write in the terminal,
+    the program doesn't execute.
+    I independently tested the perl script with the right arguments and that goes just fine.
+    The String should look something like :
+        perl Additional/result_parse.pl /home/dcl10/IdeaProjects/ProteinModel/Working/P11802.bls (wrapped around)
+        /home/dcl10/IdeaProjects/ProteinModel/Working/P11802.fasta
+     */
+    public void runParse(File file1) throws IOException, InterruptedException {
+        String bls = file1.getAbsolutePath().replace(".fasta", ".bls");
+        File file2 = new File(bls);
+        setMessage("Parsing: " + file1.getName() + System.lineSeparator());
+        process = Runtime.getRuntime().exec(parsePerl);
         process.waitFor();
-        if (process.exitValue() == 0 ) setMessage("Completed: " + file.getName() + System.lineSeparator());
-        else setMessage("Failed: " + file.getName() + System.lineSeparator());
+        if (process.exitValue() == 0 ) setMessage("Completed: " + file1.getName() + System.lineSeparator());
+        else setMessage("Failed: " + file1.getName() + System.lineSeparator());
     }
 
     /**
@@ -74,6 +88,10 @@ public class Pipeline implements Runnable {
         }
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setMessage(String s) {
         this.message += s;
     }
@@ -83,7 +101,7 @@ public class Pipeline implements Runnable {
     }
 
     /**
-     * This method is called when the user clicks "Begin" in the GUI. The while loop will execute runSearch()
+     * This method is called when the user clicks "Begin" on the GUI. The while loop will execute runSearch()
      * so long is keepRunning is true and counter is less than length of files[]. The if statement exit the loop if
      * keepRunning is set to false by calling the stopPipeline() method. The current process will also be stopped.
      */

@@ -175,6 +175,6 @@ exit 0;
 # Sub to create the filename of the log file
 sub make_log {
     $to_change = $_[0];
-    $to_change =~ s/.fasta/_results.bls/;
+    $to_change =~ s/.fasta/.bls/;
     return $to_change;
 }

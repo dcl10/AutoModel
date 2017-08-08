@@ -6,7 +6,7 @@ use strict;
 use warnings FATAL => 'all';
 
 sub write_header {
-    my $alifile = $_[0];
+	my $alifile = $_[0];
     my $header = $_[1];
     open (FILE, ">>", $alifile);
     if ($header) {
@@ -25,10 +25,10 @@ sub write_instruction {
     my $instruction = $_[1];
     open (FILE, ">>", $alifile);
     if ($instruction) {
-        print FILE "structure:$instruction:FIRST:\@:LAST:\@\n";
+        print FILE "structure:$instruction:FIRST:\@:LAST:\@:.:.:.:.\n";
     }
     else {
-        print FILE "sequence:target\n";
+        print FILE "sequence:target:.:.:.:.:.:.:.:.\n";
     }
     close FILE;
 }

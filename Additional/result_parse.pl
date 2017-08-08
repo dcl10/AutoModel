@@ -43,11 +43,11 @@ while (my $result = $searchio -> next_result) {
 $seqid =~ s/_.?/.pdb/;
 
 # Retrieve the appropriate PDB file from the PDB database.
-system "wget https://files.rcsb.org/download/$seqid";
+system "wget https://files.rcsb.org/download/$seqid -P ~/ProteinModel";
 
 # Make .ali file name.
-$alifile = $seqid;
-$alifile =~ s/.pdb/.ali/;
+$alifile = $input;
+$alifile =~ s/.bls/.ali/;
 
 # Write the template portion of the .ali file.
 AliWriter::write_header($alifile);
@@ -62,3 +62,5 @@ $new_prot_name =~ s/.bls//;
 AliWriter::write_header($alifile, $new_prot_name);
 AliWriter::write_instruction($alifile);
 AliWriter::write_sequence($alifile, $novel_seq);
+
+system "mv $alifile ~/ProteinModel";

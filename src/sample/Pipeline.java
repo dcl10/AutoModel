@@ -91,13 +91,17 @@ public class Pipeline implements Runnable {
     }
 
     /**
-     *
+     * This method adds a message to the terminal TextArea String.
      * @param s
      */
     public void setMessage(String s) {
         this.message += s;
     }
 
+    /**
+     * This method is used to access the method to be shown in the terminal TextArea.
+     * @return
+     */
     public String getMessage() {
         return message;
     }
@@ -120,7 +124,6 @@ public class Pipeline implements Runnable {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 System.out.println("The thread was interrupted" + System.lineSeparator());
-                setMessage("The thread was interrupted" + System.lineSeparator());
             }
         }
         setMessage("Workflow completed.");

@@ -2,6 +2,7 @@
 
 use strict;
 use warnings FATAL => 'all';
+use File::Spec;
 
 my $alifile = $ARGV[0];
 my $pdbfile = $ARGV[1];
@@ -16,6 +17,12 @@ my $aligncode = $file[0];
 $aligncode =~ s/\>P1;//;
 if ($aligncode =~ /\|/g) {$aligncode =~ s/\|/\\|/g;}
 
-system "python alimaker.py $alifile $aligncode $pdbfile";
+my $alimaker = "alimaker.py";
+$alimaker = File::Spec -> rel2abs($alimaker);
 
-system "python model.py $alifile $aligncode $pdbfile";
+system "python $alimaker $alifile $aligncode $pdbfile";
+
+my $model = "model.py";
+$model = File::Spec -> rel2abs($model);
+
+system "python $model $alifile $aligncode $pdbfile";

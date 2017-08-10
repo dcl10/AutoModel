@@ -10,6 +10,7 @@ use warnings FATAL => 'all';
 use Bio::SearchIO;
 use Bio::SeqIO;
 use File::Basename;
+use File::Spec;
 
 # Capture file to be parsed from @ARGV array.
 my $bls = $ARGV[0];
@@ -58,4 +59,7 @@ close FILE;
 # Move the PIR (.ali) file to the ProteinModel directory in the user home directory.
 system "mv $ali $dir";
 
-system "perl model_prep.pl $ali $seqid\n";
+my $program = "model_prep.pl";
+$program = File::Spec -> rel2abs($program);
+
+system "perl $program $ali $seqid";

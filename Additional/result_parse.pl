@@ -8,11 +8,13 @@ use warnings FATAL => 'all';
 
 # Modules required to parse BLAST search results and prepare the alignment file for modelling.
 use Bio::SearchIO;
-use Bio::SearchIO::Writer::TextResultWriter;
 use Bio::SeqIO;
+use File::Basename;
 
 # Capture file to be parsed from @ARGV array.
-my $input = $ARGV[0];
+my $bls = $ARGV[0];
+# Capture the directory of the input file.
+my $dir = dirname($bls);
 # Cpature the fasta file to be converted to a PIR (.ali) file.
 # Generate the object to contain the fasta file.
 my $fasta = $ARGV[1];
@@ -28,7 +30,7 @@ while (my $seq = $fasta_file -> next_seq()) {$alifile -> write_seq($seq);}
 # Create the object to contain the blast result (.bls) file.
 my $searchio = Bio::SearchIO -> new(
     -format => 'blast',
-    -file => "$input"
+    -file => "$bls"
 );
 # Retrieve the protein ID
 my $seqid = $searchio -> next_result -> next_hit -> name;
@@ -36,7 +38,7 @@ my $seqid = $searchio -> next_result -> next_hit -> name;
 $seqid =~ s/_.?/.pdb/;
 
 # Retrieve the appropriate PDB file from the PDB database.
-system "wget https://files.rcsb.org/download/$seqid -P ~/ProteinModel";
+system "wget https://files.rcsb.org/download/$seqid -P $dir";
 
 # Edit the PIR (.ali) ready for Modeller.
 my @lines = ();
@@ -54,4 +56,6 @@ foreach (@lines) {
 close FILE;
 
 # Move the PIR (.ali) file to the ProteinModel directory in the user home directory.
-system "mv $ali ~/ProteinModel";
+system "mv $ali $dir";
+
+system "perl model_prep.pl $ali $seqid\n";

@@ -6,7 +6,16 @@ use warnings FATAL => 'all';
 my $alifile = $ARGV[0];
 my $pdbfile = $ARGV[1];
 
-# Harvest the aligncode from the .ali file
+my @file = ();
+open (FILE, "<$alifile") or die "$!";
+foreach (<FILE>) {
+    chomp;
+    push @file, $_;
+}
+my $aligncode = $file[0];
+$aligncode =~ s/\>P1;//;
+if ($aligncode =~ /\|/g) {$aligncode =~ s/\|/\\|/g;}
 
-system "python alimaker.py $alifile $pdbfile";
+system "python alimaker.py $alifile $aligncode $pdbfile";
 
+system "python model.py $alifile $aligncode $pdbfile";

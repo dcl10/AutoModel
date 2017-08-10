@@ -74,10 +74,6 @@ public class Pipeline implements Runnable {
         else setMessage("Failed: " + file1.getName() + System.lineSeparator());
     }
 
-    public void runModel(File file) {
-        String ali =file.getAbsolutePath().replace(".fasta", ".ali");
-    }
-
     /**
      * This method is called when the user clicks the "Cancel" button in the GUI. This sets the boolean variable
      * keepRunning to false, thereby breaking the while loop in the run() method. The current process is also
@@ -130,6 +126,6 @@ public class Pipeline implements Runnable {
                 System.out.println("The thread was interrupted" + System.lineSeparator());
             }
         }
-        setMessage("Workflow completed.");
+        setMessage("Workflow completed." + System.lineSeparator());
     }
 }

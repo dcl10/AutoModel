@@ -3,7 +3,6 @@ package sample;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 

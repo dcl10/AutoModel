@@ -9,7 +9,7 @@ pdbfile = argv[3]
 
 env = environ()
 aln = alignment(env)
-mdl = model(env, file=pdbfile, model_segment=('FIRST:A','LAST:A'))
+mdl = model(env, file=pdbfile, model_segment=('FIRST:@','LAST:@'))
 aln.append_model(mdl, align_codes=pdbfile, atom_files=pdbfile)
 aln.append(file=alifile, align_codes=aligncode)
 aln.align2d()

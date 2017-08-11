@@ -17,12 +17,12 @@ my $aligncode = $file[0];
 $aligncode =~ s/\>P1;//;
 if ($aligncode =~ /\|/g) {$aligncode =~ s/\|/\\|/g;}
 
-my $alimaker = "alimaker.py";
+my $alimaker = "Additional/alimaker.py";
 $alimaker = File::Spec -> rel2abs($alimaker);
 
 system "python $alimaker $alifile $aligncode $pdbfile";
 
-my $model = "model.py";
+my $model = "Additional/model.py";
 $model = File::Spec -> rel2abs($model);
 
 system "python $model $alifile $aligncode $pdbfile";

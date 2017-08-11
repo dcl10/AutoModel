@@ -59,7 +59,7 @@ close FILE;
 # Move the PIR (.ali) file to the ProteinModel directory in the user home directory.
 system "mv $ali $dir";
 
-my $program = "model_prep.pl";
+my $program = "Additional/model_prep.pl";
 $program = File::Spec -> rel2abs($program);
 
-system "perl $program $ali $seqid";
+system "perl $program $ali $dir/$seqid";

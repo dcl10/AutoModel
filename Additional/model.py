@@ -3,6 +3,8 @@
 from modeller import *
 from modeller.automodel import *
 from sys import argv
+import subprocess as mover
+from os import path
 
 aln = argv[1]
 sequence = argv[2]
@@ -10,8 +12,9 @@ known = argv[3]
 
 env = environ()
 a = automodel(env, alnfile=aln,
-              knowns=known, sequence=sequence,
-              assess_methods=(assess.DOPE, assess.GA341))
+              knowns=known, sequence=sequence)
 a.starting_model = 1
 a.ending_model = 5
 a.make()
+
+mover.call(["cp", str(sequence)+"*"], path.dirname(aln))

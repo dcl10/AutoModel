@@ -1,13 +1,14 @@
 package sample;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.MouseEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -15,9 +16,10 @@ import java.util.TimerTask;
 This is the controller class for AutoModel. The methods determine the functionality of each button
 in the GUI.
  */
-public class Controller implements Runnable{
+public class Controller implements Initializable{
 
     private Pipeline pipeline = new Pipeline();
+    private ShowProtein showProtein = new ShowProtein();
     private Thread thread;
     @FXML
     private TextArea terminal;
@@ -30,22 +32,6 @@ public class Controller implements Runnable{
      * As the program continues, updates will be posted to the "terminal" TextArea.
      */
     public void begin() throws InterruptedException {
-        listView.setItems(new ShowProtein().getPDBFiles());
-        listView.setOnMouseClicked(event -> {
-            try {
-                Process p = Runtime.getRuntime().exec("pymol " +
-                        listView.getSelectionModel().getSelectedItem());
-                p.waitFor();
-                while (p.isAlive()) {
-                    listView.setDisable(true);
-                }
-                listView.setDisable(false);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
         pipeline.getFiles();
         thread = new Thread(pipeline);
         thread.start();
@@ -64,7 +50,7 @@ public class Controller implements Runnable{
                 terminal.setText(pipeline.getMessage());
                 System.out.println(thread.getState().toString());
                 if (thread.getState() == Thread.State.TERMINATED) timer.cancel();
-                    listView.refresh();
+                listView.setItems(showProtein.getPDBFiles());
             }
         }, 500, 500);
     }
@@ -78,11 +64,16 @@ public class Controller implements Runnable{
     }
 
     @Override
-    public void run() {
-        try {
-            begin();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void initialize(URL location, ResourceBundle resources) {
+        listView.setItems(showProtein.getPDBFiles());
+        listView.setOnMouseClicked(event -> {
+            try {
+                Process p = Runtime.getRuntime().exec("pymol " +
+                        listView.getSelectionModel().getSelectedItem());
+                p.waitFor();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

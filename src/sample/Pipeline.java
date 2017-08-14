@@ -3,6 +3,7 @@ package sample;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * This class is responsible for executing web BLAST searches against the PDB and generating results files
@@ -25,6 +26,7 @@ public class Pipeline implements Runnable {
     private Process process = null;
     private boolean keepRunning;
     private String message = "";
+    private Date date;
 
 
     /**
@@ -47,7 +49,9 @@ public class Pipeline implements Runnable {
      * @throws InterruptedException
      */
     public void runSearch(File file) throws IOException, InterruptedException {
-        setMessage("Starting: " + file.getName() + System.lineSeparator());
+        date = new Date();
+        setMessage(date.toString() + System.lineSeparator());
+        setMessage("Searching for proteins matching: " + file.getName() + System.lineSeparator());
         process = Runtime.getRuntime().exec(searchPerl + "blastp pdb " + file);
         process.waitFor();
         if (process.exitValue() == 0 ) setMessage("Completed: " + file.getName() + System.lineSeparator());
@@ -64,10 +68,11 @@ public class Pipeline implements Runnable {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void runParse(File file1) throws IOException, InterruptedException {
+    public void runPipeline(File file1) throws IOException, InterruptedException {
         String bls = file1.getAbsolutePath().replace(".fasta", ".bls");
         File file2 = new File(bls);
-        setMessage("Parsing: " + file1.getName() + System.lineSeparator());
+        setMessage(date.toString() + System.lineSeparator());
+        setMessage("Running pipeline on: " + file1.getName() + System.lineSeparator());
         process = Runtime.getRuntime().exec(parsePerl + file2 + " " + file1);
         process.waitFor();
         if (process.exitValue() == 0 ) setMessage("Completed: " + file1.getName() + System.lineSeparator());
@@ -118,12 +123,10 @@ public class Pipeline implements Runnable {
         while (keepRunning && counter < files.length) {
             try {
                 runSearch(files[counter]);
-                runParse(files[counter]);
+                runPipeline(files[counter]);
                 counter++;
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                System.out.println("The thread was interrupted" + System.lineSeparator());
             }
         }
         setMessage("Workflow completed." + System.lineSeparator());

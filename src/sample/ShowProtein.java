@@ -5,22 +5,19 @@ import javafx.collections.ObservableList;
 
 import java.io.File;
 
-public class ShowProtein implements Runnable{
+public class ShowProtein {
 
     public ObservableList getPDBFiles() {
         File dir = new File("./");
         File[] files = dir.listFiles();
         ObservableList ol = FXCollections.observableArrayList();
-        for (File f : files) {
-            if (f.getAbsolutePath().endsWith(".pdb")) {
-                ol.add(f.getName());
+        if (files != null) {
+            for (File f : files) {
+                if (f.getAbsolutePath().endsWith(".pdb")) {
+                    ol.add(f.getName());
+                }
             }
         }
         return ol;
-    }
-
-    @Override
-    public void run() {
-
     }
 }
